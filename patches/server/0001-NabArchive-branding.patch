@@ -68,7 +68,7 @@ index 5be9e73dc0314831bbaa6301fc704295dd8ed2bc..b1b55f56f8ac172dce1aeb3d31da2d47
      private final String bukkitVersion = Versioning.getBukkitVersion();
      private final Logger logger = Logger.getLogger("Minecraft");
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
-index 774556a62eb240da42e84db4502e2ed43495be17..cf8c41866c0006e815b263fab0cda5aa0cc32ee7 100644
+index 774556a62eb240da42e84db4502e2ed43495be17..3a5d91638dafe9f3050e098409d951ffc1b70fce 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
 @@ -11,7 +11,7 @@ public final class Versioning {
@@ -76,7 +76,7 @@ index 774556a62eb240da42e84db4502e2ed43495be17..cf8c41866c0006e815b263fab0cda5aa
          String result = "Unknown-Version";
  
 -        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/io.papermc.paper/paper-api/pom.properties");
-+        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/com.example.paperfork/nabarchive-api/pom.properties"); // NabArchive
++        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/com.froobworld.nabarchive/nabarchive-api/pom.properties"); // NabArchive
          Properties properties = new Properties();
  
          if (stream != null) {
