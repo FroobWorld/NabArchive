@@ -5,10 +5,19 @@ Subject: [PATCH] Stop warnings about duplicate UUIDs
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index 3b1a34b34979ab436ccd33f0a85bfae537cbecb4..1b51761decd1d0dc41213f0624491daf4c0954fa 100644
+index e13fcd15ab00ab4aee7fb3774db6984743680259..fa928aca940f0d28cb3c3b494b43a2a288439ad4 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
-@@ -1388,7 +1388,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -1396,7 +1396,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
+         Entity entity = (Entity) this.getEntities().get(player.getUUID());
+ 
+         if (entity != null) {
+-            ServerLevel.LOGGER.warn("Force-added player with duplicate UUID {}", player.getUUID().toString());
++            //ServerLevel.LOGGER.warn("Force-added player with duplicate UUID {}", player.getUUID().toString()); // NabArchive
+             entity.unRide();
+             this.removePlayerImmediately((ServerPlayer) entity, Entity.RemovalReason.DISCARDED);
+         }
+@@ -1409,7 +1409,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
          org.spigotmc.AsyncCatcher.catchOp("entity add"); // Spigot
          // Paper start
          if (entity.valid) {
@@ -17,21 +26,8 @@ index 3b1a34b34979ab436ccd33f0a85bfae537cbecb4..1b51761decd1d0dc41213f0624491daf
  
              if (DEBUG_ENTITIES) {
                  Throwable thr = entity.addedToWorldStack;
-diff --git a/src/main/java/net/minecraft/world/level/entity/EntityLookup.java b/src/main/java/net/minecraft/world/level/entity/EntityLookup.java
-index f4731d69946871768ecf16149a47d2ef1cb3e910..6c6d7ad77d14db195a1c1d4583ee2a952e7e6e85 100644
---- a/src/main/java/net/minecraft/world/level/entity/EntityLookup.java
-+++ b/src/main/java/net/minecraft/world/level/entity/EntityLookup.java
-@@ -33,7 +33,7 @@ public class EntityLookup<T extends EntityAccess> {
-     public void add(T entity) {
-         UUID uUID = entity.getUUID();
-         if (this.byUuid.containsKey(uUID)) {
--            LOGGER.warn("Duplicate entity UUID {}: {}", uUID, entity);
-+            //LOGGER.warn("Duplicate entity UUID {}: {}", uUID, entity); // NabArchive
-             // Paper start - extra debug info
-             if (entity instanceof net.minecraft.world.entity.Entity entityCast) {
-                 if (net.minecraft.server.level.ServerLevel.DEBUG_ENTITIES) {
 diff --git a/src/main/java/net/minecraft/world/level/entity/PersistentEntitySectionManager.java b/src/main/java/net/minecraft/world/level/entity/PersistentEntitySectionManager.java
-index 3d5f38a1ca0206e5bcae4ed49d3df7ce0967f722..086c842efc043f135f3a169a5c0bfd520b262bc7 100644
+index 30c4974b4019d67cffabd3e686c782659def3ba6..75f3340cdf65d9de9d1b2b69ffa12364a6ce3853 100644
 --- a/src/main/java/net/minecraft/world/level/entity/PersistentEntitySectionManager.java
 +++ b/src/main/java/net/minecraft/world/level/entity/PersistentEntitySectionManager.java
 @@ -147,7 +147,7 @@ public class PersistentEntitySectionManager<T extends EntityAccess> implements A
@@ -39,7 +35,7 @@ index 3d5f38a1ca0206e5bcae4ed49d3df7ce0967f722..086c842efc043f135f3a169a5c0bfd52
              }
              // Paper end
 -            PersistentEntitySectionManager.LOGGER.warn("UUID of added entity already exists: {}", entity);
-+            //PersistentEntitySectionManager.LOGGER.warn("UUID of added entity already exists: {}", entity); // NabArchive
++            // PersistentEntitySectionManager.LOGGER.warn("UUID of added entity already exists: {}", entity); // NabArchive
              // Paper start
-             if (net.minecraft.world.level.Level.DEBUG_ENTITIES && ((Entity) entity).level.paperConfig.duplicateUUIDMode != com.destroystokyo.paper.PaperWorldConfig.DuplicateUUIDMode.NOTHING) {
+             if (net.minecraft.world.level.Level.DEBUG_ENTITIES && ((Entity) entity).level.paperConfig().entities.spawning.duplicateUuid.mode != io.papermc.paper.configuration.WorldConfiguration.Entities.Spawning.DuplicateUUID.DuplicateUUIDMode.NOTHING) {
                  if (((Entity) entity).addedToWorldStack != null) {

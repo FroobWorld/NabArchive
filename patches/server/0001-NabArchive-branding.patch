@@ -5,10 +5,10 @@ Subject: [PATCH] NabArchive branding
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 4beb35d1e5b013395f5df101e843f41c2ce174ad..83ccc1d361b7c8c065afd19855d1553af94c0057 100644
+index 2374cc9bab5039d0a0dc11d4b2ec573ab75778a7..c532fa48f2de6d944136a4c74500c7732ad10687 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
-@@ -18,8 +18,12 @@ repositories {
+@@ -9,8 +9,12 @@ plugins {
  }
  
  dependencies {
@@ -16,14 +16,14 @@ index 4beb35d1e5b013395f5df101e843f41c2ce174ad..83ccc1d361b7c8c065afd19855d1553a
 -    implementation(project(":paper-mojangapi"))
 +    // NabArchive start
 +    implementation(project(":nabarchive-api"))
-+    implementation("io.papermc.paper:paper-mojangapi:1.18.2-R0.1-SNAPSHOT") {
++    implementation("io.papermc.paper:paper-mojangapi:1.19-R0.1-SNAPSHOT") {
 +        exclude("io.papermc.paper", "paper-api")
 +    }
 +    // NabArchive end
      // Paper start
      implementation("org.jline:jline-terminal-jansi:3.21.0")
      implementation("net.minecrell:terminalconsoleappender:1.3.0")
-@@ -68,7 +72,7 @@ tasks.jar {
+@@ -64,7 +68,7 @@ tasks.jar {
          attributes(
              "Main-Class" to "org.bukkit.craftbukkit.Main",
              "Implementation-Title" to "CraftBukkit",
@@ -32,7 +32,7 @@ index 4beb35d1e5b013395f5df101e843f41c2ce174ad..83ccc1d361b7c8c065afd19855d1553a
              "Implementation-Vendor" to date, // Paper
              "Specification-Title" to "Bukkit",
              "Specification-Version" to project.version,
-@@ -156,7 +160,7 @@ fun TaskContainer.registerRunTask(
+@@ -163,7 +167,7 @@ fun TaskContainer.registerRunTask(
      name: String,
      block: JavaExec.() -> Unit
  ): TaskProvider<JavaExec> = register<JavaExec>(name) {
@@ -42,10 +42,10 @@ index 4beb35d1e5b013395f5df101e843f41c2ce174ad..83ccc1d361b7c8c065afd19855d1553a
      standardInput = System.`in`
      workingDir = rootProject.layout.projectDirectory
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index c8d56947305c981a3268ce4ae3e975db350ceff2..b71940f068ab527efc955245fcddade282c4a173 100644
+index 77cd45f616e2ff38ad6a648b8b865a99e544f3ec..81d5a8696b2ee123b6d3db5456783b52a42114c4 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -1693,7 +1693,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -1654,7 +1654,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
  
      @DontObfuscate
      public String getServerModName() {
@@ -55,10 +55,10 @@ index c8d56947305c981a3268ce4ae3e975db350ceff2..b71940f068ab527efc955245fcddade2
  
      public SystemReport fillSystemReport(SystemReport details) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 5be9e73dc0314831bbaa6301fc704295dd8ed2bc..b1b55f56f8ac172dce1aeb3d31da2d4734e38913 100644
+index f6f4e7f393cdd03f0ec699ff461e1ac20ddef789..e08b714adaa9fe6b727988f9a30c9df32a5eefd8 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -248,7 +248,7 @@ import javax.annotation.Nullable; // Paper
+@@ -245,7 +245,7 @@ import javax.annotation.Nullable; // Paper
  import javax.annotation.Nonnull; // Paper
  
  public final class CraftServer implements Server {
