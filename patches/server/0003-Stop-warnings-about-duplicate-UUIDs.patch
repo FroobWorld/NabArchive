@@ -5,10 +5,10 @@ Subject: [PATCH] Stop warnings about duplicate UUIDs
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index e13fcd15ab00ab4aee7fb3774db6984743680259..fa928aca940f0d28cb3c3b494b43a2a288439ad4 100644
+index 083349794d5ceb50322c5a645dd33fbfcc1c8155..8013a53ea69994192f6d0070f382c7c3b00ddb90 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
-@@ -1396,7 +1396,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -1397,7 +1397,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
          Entity entity = (Entity) this.getEntities().get(player.getUUID());
  
          if (entity != null) {
@@ -17,7 +17,7 @@ index e13fcd15ab00ab4aee7fb3774db6984743680259..fa928aca940f0d28cb3c3b494b43a2a2
              entity.unRide();
              this.removePlayerImmediately((ServerPlayer) entity, Entity.RemovalReason.DISCARDED);
          }
-@@ -1409,7 +1409,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -1410,7 +1410,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
          org.spigotmc.AsyncCatcher.catchOp("entity add"); // Spigot
          // Paper start
          if (entity.valid) {
