@@ -1,0 +1,35 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: froobynooby <froobynooby@froobworld.com>
+Date: Sat, 6 Aug 2022 13:21:50 +0930
+Subject: [PATCH] Use system messages for player chat until Velocity support
+ added
+
+
+diff --git a/src/main/java/net/minecraft/network/chat/OutgoingPlayerChatMessage.java b/src/main/java/net/minecraft/network/chat/OutgoingPlayerChatMessage.java
+index bd82f0316df85b621c1970ff30bbbec0d2712ccd..eff76c63892b37fd83a1bbfa872e4e2543d9f45e 100644
+--- a/src/main/java/net/minecraft/network/chat/OutgoingPlayerChatMessage.java
++++ b/src/main/java/net/minecraft/network/chat/OutgoingPlayerChatMessage.java
+@@ -52,7 +52,7 @@ public interface OutgoingPlayerChatMessage {
+             if (!playerChatMessage.isFullyFiltered()) {
+                 RegistryAccess registryAccess = sender.level.registryAccess();
+                 ChatType.BoundNetwork boundNetwork = params.toNetwork(registryAccess);
+-                sender.connection.send(new ClientboundPlayerChatPacket(playerChatMessage, boundNetwork));
++                sender.connection.send(new net.minecraft.network.protocol.game.ClientboundSystemChatPacket(playerChatMessage.serverContent(), false)); // NabArchive
+                 sender.connection.addPendingMessage(playerChatMessage);
+             }
+ 
+@@ -91,9 +91,14 @@ public interface OutgoingPlayerChatMessage {
+                 this.playersWithFullMessage.add(sender);
+                 RegistryAccess registryAccess = sender.level.registryAccess();
+                 ChatType.BoundNetwork boundNetwork = params.toNetwork(registryAccess);
++                // NabArchive start
++                /*
+                 sender.connection.send(new ClientboundPlayerChatPacket(playerChatMessage, boundNetwork), PacketSendListener.exceptionallySend(() -> {
+                     return new ClientboundPlayerChatHeaderPacket(this.message);
+                 }));
++                */
++                sender.connection.send(new net.minecraft.network.protocol.game.ClientboundSystemChatPacket(playerChatMessage.serverContent(), false));
++                // NabArchive end
+                 sender.connection.addPendingMessage(playerChatMessage);
+             }
+ 
