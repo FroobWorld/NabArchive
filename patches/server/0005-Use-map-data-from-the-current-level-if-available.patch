@@ -1,0 +1,39 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: froobynooby <froobynooby@froobworld.com>
+Date: Sun, 25 Sep 2022 20:07:28 +0930
+Subject: [PATCH] Use map data from the current level if available
+
+
+diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
+index 1e3e7034f575d59534efde98b5a3e0305150e2d3..460871528c068fb816efd0eec163d56f272b0c34 100644
+--- a/src/main/java/net/minecraft/server/level/ServerLevel.java
++++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
+@@ -1931,7 +1931,8 @@ public class ServerLevel extends Level implements WorldGenLevel {
+     @Override
+     public MapItemSavedData getMapData(String id) {
+         // CraftBukkit start
+-        return (MapItemSavedData) this.getServer().overworld().getDataStorage().get((nbttagcompound) -> {
++        ServerLevel levelToUse = this.getDataStorage().dataExists(id) ? this : this.getServer().overworld(); // NabArchive
++        return (MapItemSavedData) levelToUse.getDataStorage().get((nbttagcompound) -> { // NabArchive
+             // We only get here when the data file exists, but is not a valid map
+             MapItemSavedData newMap = MapItemSavedData.load(nbttagcompound);
+             newMap.id = id;
+diff --git a/src/main/java/net/minecraft/world/level/storage/DimensionDataStorage.java b/src/main/java/net/minecraft/world/level/storage/DimensionDataStorage.java
+index 0465b397b628b11a6fc52e3375945c94d68cfdd5..f1f4df75202587b6b76438da5b7168575a348b29 100644
+--- a/src/main/java/net/minecraft/world/level/storage/DimensionDataStorage.java
++++ b/src/main/java/net/minecraft/world/level/storage/DimensionDataStorage.java
+@@ -31,6 +31,14 @@ public class DimensionDataStorage {
+         this.dataFolder = directory;
+     }
+ 
++    // NabArchive start
++    public boolean dataExists(String id) {
++        try {
++            return getDataFile(id).exists();
++        } catch (Exception ex) {return false;}
++    }
++    // NabArchive end
++
+     private File getDataFile(String id) {
+         return new File(this.dataFolder, id + ".dat");
+     }
