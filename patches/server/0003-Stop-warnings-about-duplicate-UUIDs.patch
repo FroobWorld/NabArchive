@@ -5,10 +5,10 @@ Subject: [PATCH] Stop warnings about duplicate UUIDs
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index 083349794d5ceb50322c5a645dd33fbfcc1c8155..8013a53ea69994192f6d0070f382c7c3b00ddb90 100644
+index b396e9b35f315db37ba070ad4baeec1f098d0cb8..248754cf2fc6a43717930ccba248ab2662233be4 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
-@@ -1397,7 +1397,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -1427,7 +1427,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
          Entity entity = (Entity) this.getEntities().get(player.getUUID());
  
          if (entity != null) {
@@ -17,7 +17,7 @@ index 083349794d5ceb50322c5a645dd33fbfcc1c8155..8013a53ea69994192f6d0070f382c7c3
              entity.unRide();
              this.removePlayerImmediately((ServerPlayer) entity, Entity.RemovalReason.DISCARDED);
          }
-@@ -1410,7 +1410,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -1440,7 +1440,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
          org.spigotmc.AsyncCatcher.catchOp("entity add"); // Spigot
          // Paper start
          if (entity.valid) {
@@ -27,15 +27,15 @@ index 083349794d5ceb50322c5a645dd33fbfcc1c8155..8013a53ea69994192f6d0070f382c7c3
              if (DEBUG_ENTITIES) {
                  Throwable thr = entity.addedToWorldStack;
 diff --git a/src/main/java/net/minecraft/world/level/entity/PersistentEntitySectionManager.java b/src/main/java/net/minecraft/world/level/entity/PersistentEntitySectionManager.java
-index 30c4974b4019d67cffabd3e686c782659def3ba6..75f3340cdf65d9de9d1b2b69ffa12364a6ce3853 100644
+index e738f058af577150445ac4ef7a0bcbf98e3ba52e..0363f5c46f6d523eaed40759fb18cbb7a0f64b01 100644
 --- a/src/main/java/net/minecraft/world/level/entity/PersistentEntitySectionManager.java
 +++ b/src/main/java/net/minecraft/world/level/entity/PersistentEntitySectionManager.java
-@@ -147,7 +147,7 @@ public class PersistentEntitySectionManager<T extends EntityAccess> implements A
-                 return true;
-             }
-             // Paper end
+@@ -79,7 +79,7 @@ public class PersistentEntitySectionManager<T extends EntityAccess> implements A
+     private boolean addEntityUuid(T entity) {
+         org.spigotmc.AsyncCatcher.catchOp("Entity add by UUID"); // Paper
+         if (!this.knownUuids.add(entity.getUUID())) {
 -            PersistentEntitySectionManager.LOGGER.warn("UUID of added entity already exists: {}", entity);
-+            // PersistentEntitySectionManager.LOGGER.warn("UUID of added entity already exists: {}", entity); // NabArchive
-             // Paper start
-             if (net.minecraft.world.level.Level.DEBUG_ENTITIES && ((Entity) entity).level.paperConfig().entities.spawning.duplicateUuid.mode != io.papermc.paper.configuration.WorldConfiguration.Entities.Spawning.DuplicateUUID.DuplicateUUIDMode.NOTHING) {
-                 if (((Entity) entity).addedToWorldStack != null) {
++            //PersistentEntitySectionManager.LOGGER.warn("UUID of added entity already exists: {}", entity); // NabArchive
+             return false;
+         } else {
+             return true;

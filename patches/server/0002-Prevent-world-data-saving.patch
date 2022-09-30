@@ -5,33 +5,19 @@ Subject: [PATCH] Prevent world data saving
 
 
 diff --git a/src/main/java/net/minecraft/world/level/chunk/storage/EntityStorage.java b/src/main/java/net/minecraft/world/level/chunk/storage/EntityStorage.java
-index acb484e074391d2f1b6b83978ea9483cfb5c214c..be430edff42299d71e58e0190eb3d53fdc66c31c 100644
+index 1782d6957fa0290368e443e2e8d7b3c77ac6b8ef..8157f5020c6468fecd6037d2a98d08c0f62abb54 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/storage/EntityStorage.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/storage/EntityStorage.java
-@@ -85,7 +85,7 @@ public class EntityStorage implements EntityPersistentStorage<Entity> {
-         ChunkPos chunkPos = dataList.getPos();
-         if (dataList.isEmpty()) {
-             if (this.emptyChunks.add(chunkPos.toLong())) {
--                this.worker.store(chunkPos, (CompoundTag)null);
-+                //this.worker.store(chunkPos, (CompoundTag)null); // NabArchive
-             }
- 
-         } else {
-@@ -112,10 +112,12 @@ public class EntityStorage implements EntityPersistentStorage<Entity> {
-             compoundTag.putInt("DataVersion", SharedConstants.getCurrentVersion().getWorldVersion());
-             compoundTag.put("Entities", listTag);
-             writeChunkPos(compoundTag, chunkPos);
-+            /* // NabArchive
-             this.worker.store(chunkPos, compoundTag).exceptionally((ex) -> {
-                 LOGGER.error("Failed to store chunk {}", chunkPos, ex);
-                 return null;
-             });
-+             */ // NabArchive
-             this.emptyChunks.remove(chunkPos.toLong());
-         }
+@@ -106,6 +106,7 @@ public class EntityStorage implements EntityPersistentStorage<Entity> {
+         return saveEntityChunk0(entities, chunkPos, level, false);
      }
+     private static CompoundTag saveEntityChunk0(List<Entity> entities, ChunkPos chunkPos, ServerLevel level, boolean force) {
++        if (true) return null; // NabArchive
+         if (!force && entities.isEmpty()) {
+             return null;
+         }
 diff --git a/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileStorage.java b/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileStorage.java
-index 4502362ff3c43eac489125deee59c66d76204e98..8cb7be0191a14af2c01e66479098f8e23062a1fd 100644
+index 8db3bcc63aeb23e5b50864ebea675acc75d184ff..2efadd27882eb42dd043d762e82aae2bf48aeb3b 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileStorage.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileStorage.java
 @@ -285,6 +285,7 @@ public class RegionFileStorage implements AutoCloseable {
@@ -39,6 +25,6 @@ index 4502362ff3c43eac489125deee59c66d76204e98..8cb7be0191a14af2c01e66479098f8e2
  
      protected void write(ChunkPos pos, @Nullable CompoundTag nbt) throws IOException {
 +        if (true) return; // NabArchive
-         RegionFile regionfile = this.getRegionFile(pos, false, true); // CraftBukkit // Paper
-         try { // Paper
-         int attempts = 0; Exception laste = null; while (attempts++ < 5) { try { // Paper
+         RegionFile regionfile = this.getRegionFile(pos, nbt == null, true); // CraftBukkit // Paper // Paper start - rewrite chunk system
+         if (nbt == null && regionfile == null) {
+             return;

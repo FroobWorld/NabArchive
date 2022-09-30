@@ -5,10 +5,10 @@ Subject: [PATCH] Use map data from the current level if available
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index 1e3e7034f575d59534efde98b5a3e0305150e2d3..460871528c068fb816efd0eec163d56f272b0c34 100644
+index 248754cf2fc6a43717930ccba248ab2662233be4..4e9dfcba4fd55e0f6929ccfdbcecfc199d368b12 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
-@@ -1931,7 +1931,8 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -1945,7 +1945,8 @@ public class ServerLevel extends Level implements WorldGenLevel {
      @Override
      public MapItemSavedData getMapData(String id) {
          // CraftBukkit start
