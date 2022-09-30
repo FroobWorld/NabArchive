@@ -28,3 +28,15 @@ index 8db3bcc63aeb23e5b50864ebea675acc75d184ff..2efadd27882eb42dd043d762e82aae2b
          RegionFile regionfile = this.getRegionFile(pos, nbt == null, true); // CraftBukkit // Paper // Paper start - rewrite chunk system
          if (nbt == null && regionfile == null) {
              return;
+diff --git a/src/main/java/net/minecraft/world/level/storage/DimensionDataStorage.java b/src/main/java/net/minecraft/world/level/storage/DimensionDataStorage.java
+index 0465b397b628b11a6fc52e3375945c94d68cfdd5..4f98f8f89d5d3c04c8c61b452bf11ce845629f76 100644
+--- a/src/main/java/net/minecraft/world/level/storage/DimensionDataStorage.java
++++ b/src/main/java/net/minecraft/world/level/storage/DimensionDataStorage.java
+@@ -153,6 +153,7 @@ public class DimensionDataStorage {
+     }
+ 
+     public void save() {
++        if (true) return; // NabArchive
+         this.cache.forEach((id, state) -> {
+             if (state != null) {
+                 state.save(this.getDataFile(id));
