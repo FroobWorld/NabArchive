@@ -5,25 +5,25 @@ Subject: [PATCH] Use map data from the current level if available
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index 248754cf2fc6a43717930ccba248ab2662233be4..4e9dfcba4fd55e0f6929ccfdbcecfc199d368b12 100644
+index 894af8219c4f51946bc2c65f8f7f97814c2f50df..41943ab8df02d9097f11ec9a90635b4c17b0909e 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
-@@ -1945,7 +1945,8 @@ public class ServerLevel extends Level implements WorldGenLevel {
-     @Override
-     public MapItemSavedData getMapData(String id) {
-         // CraftBukkit start
--        return (MapItemSavedData) this.getServer().overworld().getDataStorage().get((nbttagcompound) -> {
-+        ServerLevel levelToUse = this.getDataStorage().dataExists(id) ? this : this.getServer().overworld(); // NabArchive
-+        return (MapItemSavedData) levelToUse.getDataStorage().get((nbttagcompound) -> { // NabArchive
-             // We only get here when the data file exists, but is not a valid map
-             MapItemSavedData newMap = MapItemSavedData.load(nbttagcompound);
-             newMap.id = id;
+@@ -2137,7 +2137,8 @@ public class ServerLevel extends Level implements WorldGenLevel {
+ 
+         final net.minecraft.world.level.saveddata.SavedData existing = storage.cache.get(id.key());
+         if (existing == null && !storage.cache.containsKey(id.key())) {
+-            final MapItemSavedData worldmap = (MapItemSavedData) this.getServer().overworld().getDataStorage().get(MapItemSavedData.factory(), id.key());
++            ServerLevel levelToUse = this.getDataStorage().dataExists(id.key()) ? this : this.getServer().overworld(); // NabArchive
++            final MapItemSavedData worldmap = (MapItemSavedData) levelToUse.getDataStorage().get(MapItemSavedData.factory(), id.key()); // NabArchive
+             storage.cache.put(id.key(), worldmap);
+             if (worldmap != null) {
+                 worldmap.id = id;
 diff --git a/src/main/java/net/minecraft/world/level/storage/DimensionDataStorage.java b/src/main/java/net/minecraft/world/level/storage/DimensionDataStorage.java
-index 0465b397b628b11a6fc52e3375945c94d68cfdd5..f1f4df75202587b6b76438da5b7168575a348b29 100644
+index c3b9ef6049024ff7c2ea9b8353e8d80686c65f41..f41c1f30be18552f6e24170defcf06264b841304 100644
 --- a/src/main/java/net/minecraft/world/level/storage/DimensionDataStorage.java
 +++ b/src/main/java/net/minecraft/world/level/storage/DimensionDataStorage.java
-@@ -31,6 +31,14 @@ public class DimensionDataStorage {
-         this.dataFolder = directory;
+@@ -38,6 +38,14 @@ public class DimensionDataStorage implements java.io.Closeable { // Paper - Writ
+         this.ioExecutor = java.util.concurrent.Executors.newSingleThreadExecutor(new com.google.common.util.concurrent.ThreadFactoryBuilder().setNameFormat("DimensionDataIO - " + dataFolder.getParent() + " - %d").setDaemon(true).build()); // Paper - Write SavedData IO async
      }
  
 +    // NabArchive start

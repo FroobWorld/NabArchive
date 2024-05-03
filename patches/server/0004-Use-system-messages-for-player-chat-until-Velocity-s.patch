@@ -5,31 +5,16 @@ Subject: [PATCH] Use system messages for player chat until Velocity support
  added
 
 
-diff --git a/src/main/java/net/minecraft/network/chat/OutgoingPlayerChatMessage.java b/src/main/java/net/minecraft/network/chat/OutgoingPlayerChatMessage.java
-index bd82f0316df85b621c1970ff30bbbec0d2712ccd..eff76c63892b37fd83a1bbfa872e4e2543d9f45e 100644
---- a/src/main/java/net/minecraft/network/chat/OutgoingPlayerChatMessage.java
-+++ b/src/main/java/net/minecraft/network/chat/OutgoingPlayerChatMessage.java
-@@ -52,7 +52,7 @@ public interface OutgoingPlayerChatMessage {
-             if (!playerChatMessage.isFullyFiltered()) {
-                 RegistryAccess registryAccess = sender.level.registryAccess();
-                 ChatType.BoundNetwork boundNetwork = params.toNetwork(registryAccess);
--                sender.connection.send(new ClientboundPlayerChatPacket(playerChatMessage, boundNetwork));
-+                sender.connection.send(new net.minecraft.network.protocol.game.ClientboundSystemChatPacket(playerChatMessage.serverContent(), false)); // NabArchive
-                 sender.connection.addPendingMessage(playerChatMessage);
-             }
- 
-@@ -91,9 +91,14 @@ public interface OutgoingPlayerChatMessage {
-                 this.playersWithFullMessage.add(sender);
-                 RegistryAccess registryAccess = sender.level.registryAccess();
-                 ChatType.BoundNetwork boundNetwork = params.toNetwork(registryAccess);
-+                // NabArchive start
-+                /*
-                 sender.connection.send(new ClientboundPlayerChatPacket(playerChatMessage, boundNetwork), PacketSendListener.exceptionallySend(() -> {
-                     return new ClientboundPlayerChatHeaderPacket(this.message);
-                 }));
-+                */
-+                sender.connection.send(new net.minecraft.network.protocol.game.ClientboundSystemChatPacket(playerChatMessage.serverContent(), false));
-+                // NabArchive end
-                 sender.connection.addPendingMessage(playerChatMessage);
-             }
- 
+diff --git a/src/main/java/net/minecraft/network/chat/OutgoingChatMessage.java b/src/main/java/net/minecraft/network/chat/OutgoingChatMessage.java
+index c87b708c368713a23a10ad97704575ee4df27891..abd1aa86be631ee7e2a771bb6d363e5cdc869636 100644
+--- a/src/main/java/net/minecraft/network/chat/OutgoingChatMessage.java
++++ b/src/main/java/net/minecraft/network/chat/OutgoingChatMessage.java
+@@ -26,7 +26,7 @@ public interface OutgoingChatMessage {
+             this.sendToPlayer(sender, filterMaskEnabled, params, null);
+         }
+         public void sendToPlayer(ServerPlayer sender, boolean filterMaskEnabled, ChatType.Bound params, @javax.annotation.Nullable Component unsigned) {
+-            sender.connection.sendDisguisedChatMessage(unsigned != null ? unsigned : this.content, params);
++            sender.connection.sendDisguisedChatMessage(this.content, params); // NabArchive
+             // Paper end
+         }
+     }

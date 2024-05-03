@@ -5,10 +5,10 @@ Subject: [PATCH] Prevent world data saving
 
 
 diff --git a/src/main/java/net/minecraft/world/level/chunk/storage/EntityStorage.java b/src/main/java/net/minecraft/world/level/chunk/storage/EntityStorage.java
-index 1782d6957fa0290368e443e2e8d7b3c77ac6b8ef..8157f5020c6468fecd6037d2a98d08c0f62abb54 100644
+index bee39dee1b96023c907407877aedf3aafaf5e1b8..c501af8ff7fd621efb2696ee68e369b9afd5d7ed 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/storage/EntityStorage.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/storage/EntityStorage.java
-@@ -106,6 +106,7 @@ public class EntityStorage implements EntityPersistentStorage<Entity> {
+@@ -100,6 +100,7 @@ public class EntityStorage implements EntityPersistentStorage<Entity> {
          return saveEntityChunk0(entities, chunkPos, level, false);
      }
      private static CompoundTag saveEntityChunk0(List<Entity> entities, ChunkPos chunkPos, ServerLevel level, boolean force) {
@@ -17,26 +17,26 @@ index 1782d6957fa0290368e443e2e8d7b3c77ac6b8ef..8157f5020c6468fecd6037d2a98d08c0
              return null;
          }
 diff --git a/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileStorage.java b/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileStorage.java
-index 8db3bcc63aeb23e5b50864ebea675acc75d184ff..2efadd27882eb42dd043d762e82aae2bf48aeb3b 100644
+index f6e3b745fc417354380d4a969f83aee430bad785..c74968927905abfb41adfe12b0a08254477f0256 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileStorage.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileStorage.java
-@@ -285,6 +285,7 @@ public class RegionFileStorage implements AutoCloseable {
+@@ -299,6 +299,7 @@ public class RegionFileStorage implements AutoCloseable {
      }
  
      protected void write(ChunkPos pos, @Nullable CompoundTag nbt) throws IOException {
 +        if (true) return; // NabArchive
-         RegionFile regionfile = this.getRegionFile(pos, nbt == null, true); // CraftBukkit // Paper // Paper start - rewrite chunk system
+         // Paper start - rewrite chunk system
+         RegionFile regionfile = this.getRegionFile(pos, nbt == null, true); // CraftBukkit
          if (nbt == null && regionfile == null) {
-             return;
 diff --git a/src/main/java/net/minecraft/world/level/storage/DimensionDataStorage.java b/src/main/java/net/minecraft/world/level/storage/DimensionDataStorage.java
-index 0465b397b628b11a6fc52e3375945c94d68cfdd5..4f98f8f89d5d3c04c8c61b452bf11ce845629f76 100644
+index 6e23e69abd56eeda3b52a22019e1b74ae10682e7..c3b9ef6049024ff7c2ea9b8353e8d80686c65f41 100644
 --- a/src/main/java/net/minecraft/world/level/storage/DimensionDataStorage.java
 +++ b/src/main/java/net/minecraft/world/level/storage/DimensionDataStorage.java
-@@ -153,6 +153,7 @@ public class DimensionDataStorage {
-     }
+@@ -134,6 +134,7 @@ public class DimensionDataStorage implements java.io.Closeable { // Paper - Writ
+     // Paper end - Write SavedData IO async
  
-     public void save() {
+     public void save(boolean async) { // Paper - Write SavedData IO async
 +        if (true) return; // NabArchive
          this.cache.forEach((id, state) -> {
              if (state != null) {
-                 state.save(this.getDataFile(id));
+                 // Paper start - Write SavedData IO async
