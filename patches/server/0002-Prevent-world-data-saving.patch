@@ -17,10 +17,10 @@ index bee39dee1b96023c907407877aedf3aafaf5e1b8..c501af8ff7fd621efb2696ee68e369b9
              return null;
          }
 diff --git a/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileStorage.java b/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileStorage.java
-index f6e3b745fc417354380d4a969f83aee430bad785..c74968927905abfb41adfe12b0a08254477f0256 100644
+index 1090b7e36e3c1c105bc36135b82751c651f237d4..a9dd5ea990db9e429c0bd32682697e65fbe00947 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileStorage.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileStorage.java
-@@ -299,6 +299,7 @@ public class RegionFileStorage implements AutoCloseable {
+@@ -301,6 +301,7 @@ public class RegionFileStorage implements AutoCloseable {
      }
  
      protected void write(ChunkPos pos, @Nullable CompoundTag nbt) throws IOException {
