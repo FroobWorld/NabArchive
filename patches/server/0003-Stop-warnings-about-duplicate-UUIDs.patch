@@ -5,10 +5,10 @@ Subject: [PATCH] Stop warnings about duplicate UUIDs
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index 0981d440d0dbfe4df668d1f3f1b5706a93bc4434..894af8219c4f51946bc2c65f8f7f97814c2f50df 100644
+index f9abf63e12ea930275121b470e4e4906cff0fc12..85f8f78c09927e00123fb36d1cafd5196ac879af 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
-@@ -1671,7 +1671,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -1507,7 +1507,7 @@ public class ServerLevel extends Level implements WorldGenLevel, ca.spottedleaf.
          Entity entity = (Entity) this.getEntities().get(player.getUUID());
  
          if (entity != null) {
@@ -17,7 +17,7 @@ index 0981d440d0dbfe4df668d1f3f1b5706a93bc4434..894af8219c4f51946bc2c65f8f7f9781
              entity.unRide();
              this.removePlayerImmediately((ServerPlayer) entity, Entity.RemovalReason.DISCARDED);
          }
-@@ -1685,7 +1685,7 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -1521,7 +1521,7 @@ public class ServerLevel extends Level implements WorldGenLevel, ca.spottedleaf.
          entity.generation = false; // Paper - Don't fire sync event during generation; Reset flag if it was added during a ServerLevel generation process
          // Paper start - extra debug info
          if (entity.valid) {
@@ -27,7 +27,7 @@ index 0981d440d0dbfe4df668d1f3f1b5706a93bc4434..894af8219c4f51946bc2c65f8f7f9781
          }
          // Paper end - extra debug info
 diff --git a/src/main/java/net/minecraft/world/level/entity/PersistentEntitySectionManager.java b/src/main/java/net/minecraft/world/level/entity/PersistentEntitySectionManager.java
-index 1c6e8438219f355274db4e0fa849cdd90648fbb4..befa37bb5dbfbd29029f7113f8d06b411a75d312 100644
+index 6baa313b8201ed23193d7885c85606b0899ade3c..f4c7c9a577bac166ac033e259da72bfdffa9a05c 100644
 --- a/src/main/java/net/minecraft/world/level/entity/PersistentEntitySectionManager.java
 +++ b/src/main/java/net/minecraft/world/level/entity/PersistentEntitySectionManager.java
 @@ -80,7 +80,7 @@ public class PersistentEntitySectionManager<T extends EntityAccess> implements A

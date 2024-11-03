@@ -5,29 +5,29 @@ Subject: [PATCH] Prevent world data saving
 
 
 diff --git a/src/main/java/net/minecraft/world/level/chunk/storage/EntityStorage.java b/src/main/java/net/minecraft/world/level/chunk/storage/EntityStorage.java
-index bee39dee1b96023c907407877aedf3aafaf5e1b8..c501af8ff7fd621efb2696ee68e369b9afd5d7ed 100644
+index d4a505ef4af9ded02aeb1a817bcbe5b1a912a5b3..254c8c9e2bccba79fe3c733e0f1731229091268b 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/storage/EntityStorage.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/storage/EntityStorage.java
-@@ -100,6 +100,7 @@ public class EntityStorage implements EntityPersistentStorage<Entity> {
-         return saveEntityChunk0(entities, chunkPos, level, false);
-     }
-     private static CompoundTag saveEntityChunk0(List<Entity> entities, ChunkPos chunkPos, ServerLevel level, boolean force) {
-+        if (true) return null; // NabArchive
-         if (!force && entities.isEmpty()) {
-             return null;
-         }
+@@ -85,6 +85,7 @@ public class EntityStorage implements EntityPersistentStorage<Entity> {
+ 
+     @Override
+     public void storeEntities(ChunkEntities<Entity> dataList) {
++        if (true) return; // NabArchive
+         ChunkPos chunkPos = dataList.getPos();
+         if (dataList.isEmpty()) {
+             if (this.emptyChunks.add(chunkPos.toLong())) {
 diff --git a/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileStorage.java b/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileStorage.java
-index 1090b7e36e3c1c105bc36135b82751c651f237d4..a9dd5ea990db9e429c0bd32682697e65fbe00947 100644
+index 40689256711cc94a806ca1da346f4f62eda31526..c971cca71d83d0f9d9629e2a209f369f76d830c2 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileStorage.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileStorage.java
-@@ -301,6 +301,7 @@ public class RegionFileStorage implements AutoCloseable {
+@@ -309,6 +309,7 @@ public class RegionFileStorage implements AutoCloseable, ca.spottedleaf.moonrise
      }
  
-     protected void write(ChunkPos pos, @Nullable CompoundTag nbt) throws IOException {
+     public void write(ChunkPos pos, @Nullable CompoundTag nbt) throws IOException { // Paper - public
 +        if (true) return; // NabArchive
+         RegionFile regionfile = this.getRegionFile(pos, nbt == null); // CraftBukkit // Paper - rewrite chunk system
          // Paper start - rewrite chunk system
-         RegionFile regionfile = this.getRegionFile(pos, nbt == null, true); // CraftBukkit
-         if (nbt == null && regionfile == null) {
+         if (regionfile == null) {
 diff --git a/src/main/java/net/minecraft/world/level/storage/DimensionDataStorage.java b/src/main/java/net/minecraft/world/level/storage/DimensionDataStorage.java
 index 6e23e69abd56eeda3b52a22019e1b74ae10682e7..c3b9ef6049024ff7c2ea9b8353e8d80686c65f41 100644
 --- a/src/main/java/net/minecraft/world/level/storage/DimensionDataStorage.java

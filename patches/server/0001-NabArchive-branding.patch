@@ -5,7 +5,7 @@ Subject: [PATCH] NabArchive branding
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 4998aff0b7cb084dcda15c6a18bbe45e99b6000a..e722e7e2e85dd5f9662d03ea3592ecba9dd82535 100644
+index de0474b8dce58cb419c00b7614d7dd66be832a02..88cf202f61b5406c7454164889cc455e25736fdd 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -13,7 +13,7 @@ configurations.named(log4jPlugins.compileClasspathConfigurationName) {
@@ -17,7 +17,7 @@ index 4998aff0b7cb084dcda15c6a18bbe45e99b6000a..e722e7e2e85dd5f9662d03ea3592ecba
      // Paper start
      implementation("org.jline:jline-terminal-jansi:3.21.0")
      implementation("net.minecrell:terminalconsoleappender:1.3.0")
-@@ -80,14 +80,14 @@ tasks.jar {
+@@ -85,14 +85,14 @@ tasks.jar {
          val gitBranch = git("rev-parse", "--abbrev-ref", "HEAD").getText().trim() // Paper
          attributes(
              "Main-Class" to "org.bukkit.craftbukkit.Main",

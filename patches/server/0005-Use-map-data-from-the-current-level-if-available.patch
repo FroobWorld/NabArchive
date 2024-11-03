@@ -5,10 +5,10 @@ Subject: [PATCH] Use map data from the current level if available
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index 894af8219c4f51946bc2c65f8f7f97814c2f50df..41943ab8df02d9097f11ec9a90635b4c17b0909e 100644
+index 85f8f78c09927e00123fb36d1cafd5196ac879af..beb1ea34669ab21e58a709608fb0ca48d4ef2563 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
-@@ -2137,7 +2137,8 @@ public class ServerLevel extends Level implements WorldGenLevel {
+@@ -1971,7 +1971,8 @@ public class ServerLevel extends Level implements WorldGenLevel, ca.spottedleaf.
  
          final net.minecraft.world.level.saveddata.SavedData existing = storage.cache.get(id.key());
          if (existing == null && !storage.cache.containsKey(id.key())) {
