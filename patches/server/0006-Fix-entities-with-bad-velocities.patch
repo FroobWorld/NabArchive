@@ -1,0 +1,22 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: froobynooby <froobynooby@froobworld.com>
+Date: Sun, 3 Nov 2024 14:37:29 +0930
+Subject: [PATCH] Fix entities with bad velocities
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
+index 4b54d0ea31062972e68ee8fafe3cfaf68f65a5cd..c85637c27a4287cc7dbb72add9cfaf429a115276 100644
+--- a/src/main/java/net/minecraft/world/entity/Entity.java
++++ b/src/main/java/net/minecraft/world/entity/Entity.java
+@@ -2576,6 +2576,11 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
+             double d0 = nbttaglist1.getDouble(0);
+             double d1 = nbttaglist1.getDouble(1);
+             double d2 = nbttaglist1.getDouble(2);
++            // NabArchive start - fix entities with bad velocity
++            if (Double.isNaN(d0) || Double.isNaN(d1) || Double.isNaN(d2)) {
++                d0 = d1 = d2 = 0;
++            }
++            // NabArchive end
+ 
+             this.setDeltaMovement(Math.abs(d0) > 10.0D ? 0.0D : d0, Math.abs(d1) > 10.0D ? 0.0D : d1, Math.abs(d2) > 10.0D ? 0.0D : d2);
+             double d3 = 3.0000512E7D;
