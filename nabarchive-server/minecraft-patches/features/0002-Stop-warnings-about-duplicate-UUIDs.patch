@@ -1,0 +1,41 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: froobynooby <froobynooby@froobworld.com>
+Date: Mon, 28 Feb 2022 21:07:01 +0930
+Subject: [PATCH] Stop warnings about duplicate UUIDs
+
+
+diff --git a/net/minecraft/server/level/ServerLevel.java b/net/minecraft/server/level/ServerLevel.java
+index dda8d38ef61672cc714d9e5a475f9b0412ed5ff9..f01483a3f66cee1c5249f1fec9be2d9d8b75e90d 100644
+--- a/net/minecraft/server/level/ServerLevel.java
++++ b/net/minecraft/server/level/ServerLevel.java
+@@ -1516,7 +1516,7 @@ public class ServerLevel extends Level implements ServerEntityGetter, WorldGenLe
+     private void addPlayer(ServerPlayer player) {
+         Entity entity = this.getEntity(player.getUUID());
+         if (entity != null) {
+-            LOGGER.warn("Force-added player with duplicate UUID {}", player.getUUID());
++            //LOGGER.warn("Force-added player with duplicate UUID {}", player.getUUID()); // NabArchive
+             entity.unRide();
+             this.removePlayerImmediately((ServerPlayer)entity, Entity.RemovalReason.DISCARDED);
+         }
+@@ -1530,7 +1530,7 @@ public class ServerLevel extends Level implements ServerEntityGetter, WorldGenLe
+         entity.generation = false; // Paper - Don't fire sync event during generation; Reset flag if it was added during a ServerLevel generation process
+         // Paper start - extra debug info
+         if (entity.valid) {
+-            MinecraftServer.LOGGER.error("Attempted Double World add on {}", entity, new Throwable());
++            //MinecraftServer.LOGGER.error("Attempted Double World add on {}", entity, new Throwable()); // NabArchive
+             return true;
+         }
+         // Paper end - extra debug info
+diff --git a/net/minecraft/world/level/entity/PersistentEntitySectionManager.java b/net/minecraft/world/level/entity/PersistentEntitySectionManager.java
+index 5a0a491eae6d73f37f99270127a76932294ff2b9..79dd360d1d40076e0efcf4317c8fdb5f220c67de 100644
+--- a/net/minecraft/world/level/entity/PersistentEntitySectionManager.java
++++ b/net/minecraft/world/level/entity/PersistentEntitySectionManager.java
+@@ -71,7 +71,7 @@ public class PersistentEntitySectionManager<T extends EntityAccess> implements A
+     private boolean addEntityUuid(T entity) {
+         org.spigotmc.AsyncCatcher.catchOp("Entity add by UUID"); // Paper
+         if (!this.knownUuids.add(entity.getUUID())) {
+-            LOGGER.warn("UUID of added entity already exists: {}", entity);
++            //LOGGER.warn("UUID of added entity already exists: {}", entity); // NabArchive
+             return false;
+         } else {
+             return true;

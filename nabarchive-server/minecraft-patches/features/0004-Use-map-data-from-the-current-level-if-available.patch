@@ -1,0 +1,39 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: froobynooby <froobynooby@froobworld.com>
+Date: Sun, 25 Sep 2022 20:07:28 +0930
+Subject: [PATCH] Use map data from the current level if available
+
+
+diff --git a/net/minecraft/server/level/ServerLevel.java b/net/minecraft/server/level/ServerLevel.java
+index f01483a3f66cee1c5249f1fec9be2d9d8b75e90d..2a143320b2157eb9e52102e5fa5f38c5a4351aa6 100644
+--- a/net/minecraft/server/level/ServerLevel.java
++++ b/net/minecraft/server/level/ServerLevel.java
+@@ -2146,7 +2146,8 @@ public class ServerLevel extends Level implements ServerEntityGetter, WorldGenLe
+ 
+         final Optional<net.minecraft.world.level.saveddata.SavedData> cacheEntry = storage.cache.get(MapItemSavedData.type(mapId));
+         if (cacheEntry == null) { // Cache did not contain, try to load and may init
+-            final MapItemSavedData mapData = storage.get(MapItemSavedData.type(mapId)); // get populates the cache
++            ServerLevel levelToUse = this.getDataStorage().dataExists(mapId.key()) ? this : this.getServer().overworld(); // NabArchive
++            final MapItemSavedData mapData = (MapItemSavedData) levelToUse.getDataStorage().get(MapItemSavedData.type(mapId)); // NabArchive
+             if (mapData != null) { // map was read, init it and return
+                 mapData.id = mapId;
+                 new org.bukkit.event.server.MapInitializeEvent(mapData.mapView).callEvent();
+diff --git a/net/minecraft/world/level/storage/DimensionDataStorage.java b/net/minecraft/world/level/storage/DimensionDataStorage.java
+index 67e78c5b1d3900f32ae9e61948312f2e46538b3a..163679d2cf2cab6a2122f420269f54618bd20e2c 100644
+--- a/net/minecraft/world/level/storage/DimensionDataStorage.java
++++ b/net/minecraft/world/level/storage/DimensionDataStorage.java
+@@ -52,6 +52,14 @@ public class DimensionDataStorage implements AutoCloseable {
+         this.registries = registries;
+     }
+ 
++    // NabArchive start
++    public boolean dataExists(String id) {
++        try {
++            return getDataFile(id).toFile().exists();
++        } catch (Exception ex) {return false;}
++    }
++    // NabArchive end
++
+     private Path getDataFile(String filename) {
+         return this.dataFolder.resolve(filename + ".dat");
+     }

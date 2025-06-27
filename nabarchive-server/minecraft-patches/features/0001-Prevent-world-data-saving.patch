@@ -1,0 +1,63 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: froobynooby <froobynooby@froobworld.com>
+Date: Mon, 28 Feb 2022 19:02:49 +0930
+Subject: [PATCH] Prevent world data saving
+
+
+diff --git a/net/minecraft/world/level/chunk/storage/ChunkStorage.java b/net/minecraft/world/level/chunk/storage/ChunkStorage.java
+index f6de972541fb2ed6d65aab06d61f5dcd0bfa1616..94cb5682a1bc90967a50e353a4ba28ee106ea31d 100644
+--- a/net/minecraft/world/level/chunk/storage/ChunkStorage.java
++++ b/net/minecraft/world/level/chunk/storage/ChunkStorage.java
+@@ -152,6 +152,7 @@ public class ChunkStorage implements AutoCloseable, ca.spottedleaf.moonrise.patc
+     }
+ 
+     public CompletableFuture<Void> write(ChunkPos pos, Supplier<CompoundTag> tagSupplier) {
++        if (true) return CompletableFuture.completedFuture(null); // NabArchive
+         // Paper start - guard against possible chunk pos desync
+         final Supplier<CompoundTag> guardedPosCheck = () -> {
+             CompoundTag nbt = tagSupplier.get();
+diff --git a/net/minecraft/world/level/chunk/storage/EntityStorage.java b/net/minecraft/world/level/chunk/storage/EntityStorage.java
+index f1f8575a4b37114ced3cdb1d2ea33a36a2db44fd..01e651ac976161df37c3197b0f45c3404f14af68 100644
+--- a/net/minecraft/world/level/chunk/storage/EntityStorage.java
++++ b/net/minecraft/world/level/chunk/storage/EntityStorage.java
+@@ -87,6 +87,7 @@ public class EntityStorage implements EntityPersistentStorage<Entity> {
+ 
+     @Override
+     public void storeEntities(ChunkEntities<Entity> entities) {
++        if (true) return; // NabArchive
+         ChunkPos pos = entities.getPos();
+         if (entities.isEmpty()) {
+             if (this.emptyChunks.add(pos.toLong())) {
+diff --git a/net/minecraft/world/level/chunk/storage/RegionFileStorage.java b/net/minecraft/world/level/chunk/storage/RegionFileStorage.java
+index 384f2cd090d6d23bd1308d6e82c24338f2bf55d1..84a267213e135f09c62447eac12307fa661924e8 100644
+--- a/net/minecraft/world/level/chunk/storage/RegionFileStorage.java
++++ b/net/minecraft/world/level/chunk/storage/RegionFileStorage.java
+@@ -136,7 +136,7 @@ public class RegionFileStorage implements AutoCloseable, ca.spottedleaf.moonrise
+     public final ca.spottedleaf.moonrise.patches.chunk_system.io.MoonriseRegionFileIO.RegionDataController.WriteData moonrise$startWrite(
+         final int chunkX, final int chunkZ, final CompoundTag compound
+     ) throws IOException {
+-        if (compound == null) {
++        if (true || compound == null) { // NabArchive
+             return new ca.spottedleaf.moonrise.patches.chunk_system.io.MoonriseRegionFileIO.RegionDataController.WriteData(
+                 compound, ca.spottedleaf.moonrise.patches.chunk_system.io.MoonriseRegionFileIO.RegionDataController.WriteData.WriteResult.DELETE,
+                 null, null
+@@ -176,6 +176,7 @@ public class RegionFileStorage implements AutoCloseable, ca.spottedleaf.moonrise
+     public final void moonrise$finishWrite(
+         final int chunkX, final int chunkZ, final ca.spottedleaf.moonrise.patches.chunk_system.io.MoonriseRegionFileIO.RegionDataController.WriteData writeData
+     ) throws IOException {
++        if (true) return; // NabArchive
+         final ChunkPos pos = new ChunkPos(chunkX, chunkZ);
+         if (writeData.result() == ca.spottedleaf.moonrise.patches.chunk_system.io.MoonriseRegionFileIO.RegionDataController.WriteData.WriteResult.DELETE) {
+             final RegionFile regionFile = this.moonrise$getRegionFileIfExists(chunkX, chunkZ);
+diff --git a/net/minecraft/world/level/storage/DimensionDataStorage.java b/net/minecraft/world/level/storage/DimensionDataStorage.java
+index 1ff0b19a077333ad9da9cab7f5a891eeaa2109a9..67e78c5b1d3900f32ae9e61948312f2e46538b3a 100644
+--- a/net/minecraft/world/level/storage/DimensionDataStorage.java
++++ b/net/minecraft/world/level/storage/DimensionDataStorage.java
+@@ -144,6 +144,7 @@ public class DimensionDataStorage implements AutoCloseable {
+     }
+ 
+     public CompletableFuture<?> scheduleSave() {
++        if (true) return CompletableFuture.completedFuture(null); // NabArchive
+         Map<SavedDataType<?>, CompoundTag> map = this.collectDirtyTagsToSave();
+         if (map.isEmpty()) {
+             return CompletableFuture.completedFuture(null);

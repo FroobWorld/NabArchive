@@ -1,0 +1,22 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: froobynooby <froobynooby@froobworld.com>
+Date: Sun, 3 Nov 2024 14:37:29 +0930
+Subject: [PATCH] Fix entities with bad velocities
+
+
+diff --git a/net/minecraft/world/entity/Entity.java b/net/minecraft/world/entity/Entity.java
+index 3d2c0a4d3a1f9d3e5cc6cd0cdb988ae1205de821..66c93475ec8c3408fe8701c120cc8ee17341d429 100644
+--- a/net/minecraft/world/entity/Entity.java
++++ b/net/minecraft/world/entity/Entity.java
+@@ -2598,6 +2598,11 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
+             Vec3 vec3 = input.read("Pos", Vec3.CODEC).orElse(Vec3.ZERO);
+             Vec3 vec31 = input.read("Motion", Vec3.CODEC).orElse(Vec3.ZERO); vec31 = io.papermc.paper.util.MCUtil.sanitizeNanInf(vec31, 0D); // Paper - avoid setting NaN values
+             Vec2 vec2 = input.read("Rotation", Vec2.CODEC).orElse(Vec2.ZERO);
++            // NabArchive start - fix entities with bad velocity
++            if (Double.isNaN(vec31.x) || Double.isNaN(vec31.y) || Double.isNaN(vec31.z)) {
++                vec31 = new Vec3(0, 0, 0);
++            }
++            // NabArchive end
+             this.setDeltaMovement(Math.abs(vec31.x) > 10.0 ? 0.0 : vec31.x, Math.abs(vec31.y) > 10.0 ? 0.0 : vec31.y, Math.abs(vec31.z) > 10.0 ? 0.0 : vec31.z);
+             this.hasImpulse = true;
+             double d = 3.0000512E7;

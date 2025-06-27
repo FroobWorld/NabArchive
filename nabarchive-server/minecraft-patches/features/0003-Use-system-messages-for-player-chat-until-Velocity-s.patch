@@ -1,0 +1,20 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: froobynooby <froobynooby@froobworld.com>
+Date: Sat, 6 Aug 2022 13:21:50 +0930
+Subject: [PATCH] Use system messages for player chat until Velocity support
+ added
+
+
+diff --git a/net/minecraft/network/chat/OutgoingChatMessage.java b/net/minecraft/network/chat/OutgoingChatMessage.java
+index 4635182c73f28f63ba84982cb6bcb422221b738e..b79f2144b7aca842723cfaf04304cc2d29bd3801 100644
+--- a/net/minecraft/network/chat/OutgoingChatMessage.java
++++ b/net/minecraft/network/chat/OutgoingChatMessage.java
+@@ -26,7 +26,7 @@ public interface OutgoingChatMessage {
+             this.sendToPlayer(player, filtered, boundType, null);
+         }
+         public void sendToPlayer(ServerPlayer player, boolean filtered, ChatType.Bound boundType, @javax.annotation.Nullable Component unsigned) {
+-            player.connection.sendDisguisedChatMessage(unsigned != null ? unsigned : this.content, boundType);
++            player.connection.sendDisguisedChatMessage(this.content, boundType); // NabArchive
+             // Paper end
+         }
+     }
